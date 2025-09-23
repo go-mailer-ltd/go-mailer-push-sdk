@@ -1,0 +1,22 @@
+// Root build.gradle for JitPack publication
+// This file allows JitPack to build our Android SDK from the sdk/android/go-mailer directory
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+// Configure JitPack to build the Android module
+task wrapper(type: Wrapper) {
+    gradleVersion = '8.0'
+}
+
+// Tell JitPack where to find our Android module
+subprojects {
+    apply plugin: 'maven-publish'
+    
+    group = 'com.github.go-mailer-ltd'
+    version = '1.0.1'
+}

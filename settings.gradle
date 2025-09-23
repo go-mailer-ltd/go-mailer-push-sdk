@@ -1,0 +1,5 @@
+rootProject.name = 'go-mailer-push-sdk'
+
+// Include the Android SDK module
+include ':go-mailer'
+project(':go-mailer').projectDir = new File('sdk/android/go-mailer')
