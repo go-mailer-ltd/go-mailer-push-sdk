@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "GoMailerPushSDK"
-  spec.version      = "1.0.0"
+  spec.version      = "1.0.1"
   spec.summary      = "Receive push notifications from Go-Mailer in your iOS app"
   spec.description  = <<-DESC
     Go-Mailer Push SDK for iOS handles device registration, user identification, 
@@ -8,7 +8,7 @@ Pod::Spec.new do |spec|
     notifications - you just integrate our helper functions at the right time.
   DESC
 
-  spec.homepage     = "https://github.com/go-mailer-ltd/go-mailer-push-sdk"
+  spec.homepage     = "https://docs.go-mailer.com/ios"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "Go Mailer Team" => "support@gomailer.com" }
 

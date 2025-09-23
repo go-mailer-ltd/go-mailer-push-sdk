@@ -18,5 +18,5 @@ subprojects {
     apply plugin: 'maven-publish'
     
     group = 'com.github.go-mailer-ltd'
-    version = '1.0.1'
+    version = '1.0.2'
 }
