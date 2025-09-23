@@ -12,7 +12,7 @@ Pod::Spec.new do |spec|
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = { "Go Mailer Team" => "support@gomailer.com" }
 
-  spec.platform     = :ios, "10.0"
+  spec.platform     = :ios, "12.0"
   spec.swift_version = "5.0"
 
   spec.source       = { :git => "https://github.com/go-mailer-ltd/go-mailer-push-sdk.git", :tag => "v#{spec.version}" }

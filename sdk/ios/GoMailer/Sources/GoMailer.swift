@@ -158,7 +158,7 @@ import UIKit
     @objc public var logLevel: GoMailerLogLevel = .info
     
     /// SDK Version
-    @objc public static let version: String = "1.0.0"
+    @objc public static let sdkVersion: String = "1.0.0"
     
     public override init() {
         super.init()
