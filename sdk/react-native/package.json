@@ -1,6 +1,6 @@
 {
   "name": "go-mailer-push-sdk",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Go Mailer SDK for React Native - Cross-platform customer engagement messaging",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

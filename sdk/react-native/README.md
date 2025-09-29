@@ -48,8 +48,39 @@ cd ios && pod install
 ```typescript
 import GoMailer from 'go-mailer-push-sdk';
 
+// Initialize Go-Mailer SDK (defaults to production)
 await GoMailer.initialize({
   apiKey: 'your-go-mailer-api-key'
+});
+```
+
+### Environment Configuration
+
+The SDK supports multiple environments for testing:
+
+```typescript
+// Production (default)
+await GoMailer.initialize({
+  apiKey: 'your-api-key',
+  environment: 'production' // https://api.go-mailer.com/v1
+});
+
+// Staging
+await GoMailer.initialize({
+  apiKey: 'your-api-key',
+  environment: 'staging' // https://api.gm-g7.xyz/v1
+});
+
+// Development
+await GoMailer.initialize({
+  apiKey: 'your-api-key',
+  environment: 'development' // https://api.gm-g6.xyz/v1
+});
+
+// Custom endpoint
+await GoMailer.initialize({
+  apiKey: 'your-api-key',
+  baseUrl: 'https://your-custom-endpoint.com/v1'
 });
 ```
 

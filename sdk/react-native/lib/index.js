@@ -12,6 +12,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GoMailerError = exports.GoMailerLogLevel = void 0;
 const react_native_1 = require("react-native");
 const GoMailerModule = react_native_1.NativeModules.GoMailerModule;
+// Environment endpoints
+const ENVIRONMENT_ENDPOINTS = {
+    production: 'https://api.go-mailer.com/v1',
+    staging: 'https://api.gm-g7.xyz/v1',
+    development: 'https://api.gm-g6.xyz/v1',
+};
 var GoMailerLogLevel;
 (function (GoMailerLogLevel) {
     GoMailerLogLevel["DEBUG"] = "debug";
@@ -82,8 +88,17 @@ class GoMailer {
                 throw new Error('Go Mailer: Native module not found. Make sure the native module is properly linked.');
             }
             try {
+                // Determine baseUrl from environment or explicit baseUrl
+                let baseUrl = config.baseUrl;
+                if (!baseUrl && config.environment) {
+                    baseUrl = ENVIRONMENT_ENDPOINTS[config.environment];
+                }
+                if (!baseUrl) {
+                    baseUrl = 'https://api.go-mailer.com/v1'; // Default to production
+                }
                 // Set production defaults
-                const finalConfig = Object.assign({ baseUrl: 'https://api.go-mailer.com/v1', enableAnalytics: true, enableOfflineQueue: true, maxRetryAttempts: 3, retryDelayMs: 1000, logLevel: GoMailerLogLevel.INFO }, config);
+                const finalConfig = Object.assign(Object.assign({ enableAnalytics: true, enableOfflineQueue: true, maxRetryAttempts: 3, retryDelayMs: 1000, logLevel: GoMailerLogLevel.INFO }, config), { // User config overrides defaults
+                    baseUrl });
                 this.logLevel = finalConfig.logLevel || GoMailerLogLevel.INFO;
                 yield GoMailerModule.initialize(finalConfig);
                 this.isInitialized = true;
@@ -291,6 +306,18 @@ class GoMailer {
         }
     }
     /**
+     * Get environment from baseUrl (for debugging/info purposes)
+     */
+    static getEnvironmentFromUrl(baseUrl) {
+        if (baseUrl.includes('go-mailer.com'))
+            return 'production';
+        if (baseUrl.includes('gm-g7.xyz'))
+            return 'staging';
+        if (baseUrl.includes('gm-g6.xyz'))
+            return 'development';
+        return 'custom';
+    }
+    /**
      * Internal logging method
      * @param message Log message
      * @param level Log level
@@ -328,7 +355,7 @@ class GoMailer {
     }
 }
 /** SDK Version */
-GoMailer.VERSION = '1.0.0';
+GoMailer.VERSION = '1.1.0';
 // Export the singleton instance
 exports.default = GoMailer.getInstance();
 //# sourceMappingURL=index.js.map

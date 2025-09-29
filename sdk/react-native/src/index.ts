@@ -62,7 +62,7 @@ class GoMailer {
   private logLevel: GoMailerLogLevel = GoMailerLogLevel.INFO;
 
   /** SDK Version */
-  public static readonly VERSION = '1.0.0';
+  public static readonly VERSION = '1.1.0';
 
   constructor() {
     this.log('Initializing Go Mailer SDK...', GoMailerLogLevel.DEBUG);
@@ -122,7 +122,6 @@ class GoMailer {
 
       // Set production defaults
       const finalConfig: GoMailerConfig = {
-        baseUrl,
         enableAnalytics: true,
         enableOfflineQueue: true,
         maxRetryAttempts: 3,

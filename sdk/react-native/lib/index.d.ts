@@ -1,6 +1,8 @@
+export type GoMailerEnvironment = 'production' | 'staging' | 'development';
 export interface GoMailerConfig {
     apiKey: string;
     baseUrl?: string;
+    environment?: GoMailerEnvironment;
     enableAnalytics?: boolean;
     enableOfflineQueue?: boolean;
     maxRetryAttempts?: number;
@@ -43,7 +45,7 @@ declare class GoMailer {
     private eventEmitter;
     private logLevel;
     /** SDK Version */
-    static readonly VERSION = "1.0.0";
+    static readonly VERSION = "1.1.0";
     constructor();
     /**
      * Get the singleton instance of Go Mailer
@@ -126,6 +128,10 @@ declare class GoMailer {
      * Check if SDK is initialized
      */
     private checkInitialization;
+    /**
+     * Get environment from baseUrl (for debugging/info purposes)
+     */
+    static getEnvironmentFromUrl(baseUrl: string): GoMailerEnvironment | 'custom';
     /**
      * Internal logging method
      * @param message Log message

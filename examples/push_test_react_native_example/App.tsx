@@ -20,12 +20,14 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {NativeModules} from 'react-native';
-import GoMailer from 'go-mailer-push-sdk';
+import GoMailer, { GoMailerEnvironment } from 'go-mailer-push-sdk';
+import EnvironmentSelector from './EnvironmentSelector';
 
 function App(): React.JSX.Element {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('Ready');
   const [deviceToken, setDeviceToken] = useState('');
+  const [currentEnvironment, setCurrentEnvironment] = useState<GoMailerEnvironment>('production');
 
   useEffect(() => {
     // Test if the native module is available
@@ -89,15 +91,19 @@ function App(): React.JSX.Element {
       setStatus('Initializing...');
       await GoMailer.initialize({
         apiKey: 'TmF0aGFuLTg5NzI3NDY2NDgzMy42MzI2LTE=',
-        // baseUrl is optional - defaults to production endpoint
-        // baseUrl: 'https://api.go-mailer.com/v1',
+        environment: currentEnvironment,
       });
-      setStatus('SDK initialized successfully');
+      setStatus(`SDK initialized successfully (${currentEnvironment})`);
     } catch (error) {
       console.error('Failed to initialize SDK:', error);
       setStatus('Failed to initialize SDK');
       Alert.alert('Error', 'Failed to initialize Go Mailer SDK');
     }
+  };
+
+  const handleEnvironmentChange = (newEnvironment: GoMailerEnvironment) => {
+    setCurrentEnvironment(newEnvironment);
+    setStatus(`Environment changed to ${newEnvironment}. Please reinitialize.`);
   };
 
   const setUser = async () => {
@@ -188,6 +194,11 @@ function App(): React.JSX.Element {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View style={styles.content}>
           <Text style={styles.title}>Go Mailer SDK Test</Text>
+          
+          <EnvironmentSelector 
+            currentEnvironment={currentEnvironment}
+            onEnvironmentChange={handleEnvironmentChange}
+          />
           
           <View style={styles.statusContainer}>
             <Text style={styles.statusLabel}>Status:</Text>
