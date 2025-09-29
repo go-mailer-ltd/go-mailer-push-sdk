@@ -20,7 +20,7 @@ import {
   PermissionsAndroid,
 } from 'react-native';
 import {NativeModules} from 'react-native';
-import GoMailer from 'go-mailer';
+import GoMailer from 'go-mailer-push-sdk';
 
 function App(): React.JSX.Element {
   const [email, setEmail] = useState('');
@@ -89,7 +89,8 @@ function App(): React.JSX.Element {
       setStatus('Initializing...');
       await GoMailer.initialize({
         apiKey: 'TmF0aGFuLTg5NzI3NDY2NDgzMy42MzI2LTE=',
-        baseUrl: 'https://419c321798d9.ngrok-free.app/v1',
+        // baseUrl is optional - defaults to production endpoint
+        // baseUrl: 'https://api.go-mailer.com/v1',
       });
       setStatus('SDK initialized successfully');
     } catch (error) {
