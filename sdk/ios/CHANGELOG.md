@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.1.0] - 2025-01-23
+
+### Added
+- **Multi-environment support**: Choose between production, staging, and development environments
+- `GoMailerEnvironment` enum with predefined endpoints
+- `environment` parameter in `GoMailerConfig` for easy environment switching
+- Convenience initializer: `GoMailerConfig(environment: .staging)`
+- `GoMailerEnvironment.from(url:)` helper method for debugging
+- Backward compatibility with explicit `baseURL` configuration
+
+### Changed
+- **Default endpoint**: Now defaults to production (`https://api.go-mailer.com/v1`)
+- Enhanced README with environment configuration examples
+- Improved logging shows active environment and endpoint
+
+### Migration Guide
+- Existing code continues to work without changes
+- To use environments: `GoMailerConfig(environment: .staging)`
+- Legacy ngrok URLs automatically upgrade to production
+
 ## [1.0.0] - 2024-09-23
 
 ### Added

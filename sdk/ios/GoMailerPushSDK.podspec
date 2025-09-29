@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "GoMailerPushSDK"
-  spec.version      = "1.0.1"
+  spec.version      = "1.1.0"
   spec.summary      = "Receive push notifications from Go-Mailer in your iOS app"
   spec.description  = <<-DESC
     Go-Mailer Push SDK for iOS handles device registration, user identification, 

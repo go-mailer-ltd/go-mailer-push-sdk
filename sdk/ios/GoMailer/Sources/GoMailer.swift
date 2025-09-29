@@ -163,7 +163,7 @@ import UIKit
     @objc public var logLevel: GoMailerLogLevel = .info
     
     /// SDK Version
-    @objc public static let sdkVersion: String = "1.0.0"
+    @objc public static let sdkVersion: String = "1.1.0"
     
     /// Get the effective base URL (from environment or explicit baseURL)
     @objc public var effectiveBaseURL: String {

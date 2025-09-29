@@ -53,12 +53,43 @@ In Xcode, go to your target's **Signing & Capabilities** and add:
 
 **Step 1: Initialize** (call once in `AppDelegate.swift`)
 ```swift
-import GoMailer
+import GoMailerPushSDK
 
 func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    GoMailer.setup(apiKey: "your-go-mailer-api-key")
+    // Initialize Go-Mailer SDK (defaults to production)
+    GoMailer.initialize(apiKey: "your-go-mailer-api-key")
     return true
 }
+```
+
+### Environment Configuration
+
+The SDK supports multiple environments for testing:
+
+```swift
+// Production (default)
+let config = GoMailerConfig()
+config.environment = .production // https://api.go-mailer.com/v1
+GoMailer.initialize(apiKey: "your-api-key", config: config)
+
+// Staging
+let config = GoMailerConfig()
+config.environment = .staging // https://api.gm-g7.xyz/v1
+GoMailer.initialize(apiKey: "your-api-key", config: config)
+
+// Development
+let config = GoMailerConfig()
+config.environment = .development // https://api.gm-g6.xyz/v1
+GoMailer.initialize(apiKey: "your-api-key", config: config)
+
+// Custom endpoint
+let config = GoMailerConfig()
+config.baseURL = "https://your-custom-endpoint.com/v1"
+GoMailer.initialize(apiKey: "your-api-key", config: config)
+
+// Convenience initializer
+let config = GoMailerConfig(environment: .development)
+GoMailer.initialize(apiKey: "your-api-key", config: config)
 ```
 
 **Step 2: Identify the user** (call when user logs in or you know their email)
