@@ -39,9 +39,13 @@ class GoMailer private constructor() {
             val finalConfig = config ?: GoMailerConfig()
             finalConfig.apiKey = apiKey
             
-            // Use production endpoint by default, allow config override
-            if (finalConfig.baseUrl.contains("ngrok") || finalConfig.baseUrl.contains("gm-g6.xyz")) {
-                finalConfig.baseUrl = "https://api.go-mailer.com/v1"
+            // Update legacy URLs to production if needed
+            finalConfig.baseUrl?.let { baseUrl ->
+                if (baseUrl.contains("ngrok") || baseUrl.contains("gm-g6.xyz")) {
+                    Log.d(TAG, "🔄 Upgrading legacy URL to production endpoint")
+                    finalConfig.baseUrl = null // Use environment default
+                    finalConfig.environment = GoMailerEnvironment.PRODUCTION
+                }
             }
             
             instance = GoMailer()
@@ -49,7 +53,8 @@ class GoMailer private constructor() {
             isInitialized = true
             
             Log.i(TAG, "✅ Go Mailer SDK initialized successfully with version $VERSION")
-            Log.i(TAG, "🌐 Base URL: ${finalConfig.baseUrl}")
+            Log.i(TAG, "🌐 Base URL: ${finalConfig.getEffectiveBaseUrl()}")
+            Log.i(TAG, "🏷️ Environment: ${finalConfig.environment}")
         }
         
         /**
@@ -181,10 +186,18 @@ class GoMailer private constructor() {
  */
 data class GoMailerConfig(
     var apiKey: String = "",
-    var baseUrl: String = "https://api.go-mailer.com/v1", // Production endpoint
+    var baseUrl: String? = null,
+    var environment: GoMailerEnvironment = GoMailerEnvironment.PRODUCTION,
     var enableAnalytics: Boolean = true,
     var logLevel: GoMailerLogLevel = GoMailerLogLevel.INFO
-)
+) {
+    /**
+     * Get the effective base URL (from environment or explicit baseUrl)
+     */
+    fun getEffectiveBaseUrl(): String {
+        return baseUrl?.takeIf { it.isNotEmpty() } ?: environment.endpoint
+    }
+}
 
 /**
  * User information for Go Mailer
@@ -206,6 +219,29 @@ enum class GoMailerLogLevel {
     INFO,
     WARN,
     ERROR
+}
+
+/**
+ * Available Go Mailer environments
+ */
+enum class GoMailerEnvironment(val endpoint: String) {
+    PRODUCTION("https://api.go-mailer.com/v1"),
+    STAGING("https://api.gm-g7.xyz/v1"),
+    DEVELOPMENT("https://api.gm-g6.xyz/v1");
+
+    companion object {
+        /**
+         * Get environment from URL (for debugging purposes)
+         */
+        fun fromUrl(url: String): GoMailerEnvironment? {
+            return when {
+                url.contains("go-mailer.com") -> PRODUCTION
+                url.contains("gm-g7.xyz") -> STAGING
+                url.contains("gm-g6.xyz") -> DEVELOPMENT
+                else -> null // Custom URL
+            }
+        }
+    }
 }
 
 /**

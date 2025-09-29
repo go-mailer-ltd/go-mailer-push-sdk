@@ -136,16 +136,20 @@ import UIKit
         
         let finalConfig = config ?? GoMailerConfig()
         finalConfig.apiKey = apiKey
-        // Use production endpoint by default, allow config override
-        if finalConfig.baseURL.contains("ngrok") || finalConfig.baseURL.contains("gm-g6.xyz") {
-            finalConfig.baseURL = "https://api.go-mailer.com/v1"
+        
+        // Update legacy URLs to production if needed
+        if let baseURL = finalConfig.baseURL, (baseURL.contains("ngrok") || baseURL.contains("gm-g6.xyz")) {
+            print("Go Mailer: 🔄 Upgrading legacy URL to production endpoint")
+            finalConfig.baseURL = nil // Use environment default
+            finalConfig.environment = .production
         }
         
         manager = GoMailerManager(config: finalConfig)
         isInitialized = true
         
-        print("Go Mailer: ✅ SDK initialized successfully with version \(GoMailerConfig.version)")
-        print("Go Mailer: 🌐 Base URL: \(finalConfig.baseURL)")
+        print("Go Mailer: ✅ SDK initialized successfully with version \(GoMailerConfig.sdkVersion)")
+        print("Go Mailer: 🌐 Base URL: \(finalConfig.effectiveBaseURL)")
+        print("Go Mailer: 🏷️ Environment: \(finalConfig.environment)")
     }
 }
 
@@ -153,15 +157,30 @@ import UIKit
 
 @objc public class GoMailerConfig: NSObject {
     @objc public var apiKey: String = ""
-    @objc public var baseURL: String = "https://api.go-mailer.com/v1" // Production endpoint
+    @objc public var baseURL: String?
+    @objc public var environment: GoMailerEnvironment = .production
     @objc public var enableAnalytics: Bool = true
     @objc public var logLevel: GoMailerLogLevel = .info
     
     /// SDK Version
     @objc public static let sdkVersion: String = "1.0.0"
     
+    /// Get the effective base URL (from environment or explicit baseURL)
+    @objc public var effectiveBaseURL: String {
+        if let baseURL = baseURL, !baseURL.isEmpty {
+            return baseURL
+        }
+        return environment.endpoint
+    }
+    
     public override init() {
         super.init()
+    }
+    
+    /// Convenience initializer with environment
+    @objc public convenience init(environment: GoMailerEnvironment) {
+        self.init()
+        self.environment = environment
     }
 }
 
@@ -170,6 +189,32 @@ import UIKit
     case info = 1
     case warning = 2
     case error = 3
+}
+
+@objc public enum GoMailerEnvironment: Int {
+    case production = 0
+    case staging = 1
+    case development = 2
+    
+    /// Get the endpoint URL for this environment
+    public var endpoint: String {
+        switch self {
+        case .production:
+            return "https://api.go-mailer.com/v1"
+        case .staging:
+            return "https://api.gm-g7.xyz/v1"
+        case .development:
+            return "https://api.gm-g6.xyz/v1"
+        }
+    }
+    
+    /// Get environment from URL (for debugging purposes)
+    public static func from(url: String) -> GoMailerEnvironment? {
+        if url.contains("go-mailer.com") { return .production }
+        if url.contains("gm-g7.xyz") { return .staging }
+        if url.contains("gm-g6.xyz") { return .development }
+        return nil // Custom URL
+    }
 }
 
 @objc public class GoMailerUser: NSObject {

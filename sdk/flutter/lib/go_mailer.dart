@@ -199,21 +199,34 @@ class GoMailer {
 /// Configuration for Go Mailer SDK
 class GoMailerConfig {
   String apiKey;
-  String baseUrl;
+  String? baseUrl;
+  GoMailerEnvironment? environment;
   bool enableAnalytics;
   GoMailerLogLevel logLevel;
 
   GoMailerConfig({
     this.apiKey = '',
-    this.baseUrl = 'https://api.go-mailer.com/v1', // Production endpoint
+    this.baseUrl,
+    this.environment,
     this.enableAnalytics = true,
     this.logLevel = GoMailerLogLevel.info,
   });
 
+  /// Get the effective base URL (from environment or explicit baseUrl)
+  String get effectiveBaseUrl {
+    if (baseUrl != null && baseUrl!.isNotEmpty) {
+      return baseUrl!;
+    }
+    if (environment != null) {
+      return _environmentEndpoints[environment!]!;
+    }
+    return _environmentEndpoints[GoMailerEnvironment.production]!; // Default to production
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'apiKey': apiKey,
-      'baseUrl': baseUrl,
+      'baseUrl': effectiveBaseUrl,
       'enableAnalytics': enableAnalytics,
       'logLevel': logLevel.index,
     };
@@ -278,6 +291,28 @@ enum GoMailerLogLevel {
   info,
   warn,
   error,
+}
+
+/// Available Go Mailer environments
+enum GoMailerEnvironment {
+  production,
+  staging,
+  development,
+}
+
+/// Environment endpoint mappings
+const Map<GoMailerEnvironment, String> _environmentEndpoints = {
+  GoMailerEnvironment.production: 'https://api.go-mailer.com/v1',
+  GoMailerEnvironment.staging: 'https://api.gm-g7.xyz/v1',
+  GoMailerEnvironment.development: 'https://api.gm-g6.xyz/v1',
+};
+
+/// Helper function to get environment from URL (for debugging purposes)
+GoMailerEnvironment? getEnvironmentFromUrl(String url) {
+  if (url.contains('go-mailer.com')) return GoMailerEnvironment.production;
+  if (url.contains('gm-g7.xyz')) return GoMailerEnvironment.staging;
+  if (url.contains('gm-g6.xyz')) return GoMailerEnvironment.development;
+  return null; // Custom URL
 }
 
 /// Custom exception class for Go Mailer SDK errors

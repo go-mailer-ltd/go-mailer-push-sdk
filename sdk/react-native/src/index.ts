@@ -2,15 +2,25 @@ import { NativeModules, NativeEventEmitter } from 'react-native';
 
 const GoMailerModule = NativeModules.GoMailerModule;
 
+export type GoMailerEnvironment = 'production' | 'staging' | 'development';
+
 export interface GoMailerConfig {
   apiKey: string;
   baseUrl?: string;
+  environment?: GoMailerEnvironment;
   enableAnalytics?: boolean;
   enableOfflineQueue?: boolean;
   maxRetryAttempts?: number;
   retryDelayMs?: number;
   logLevel?: GoMailerLogLevel;
 }
+
+// Environment endpoints
+const ENVIRONMENT_ENDPOINTS: Record<GoMailerEnvironment, string> = {
+  production: 'https://api.go-mailer.com/v1',
+  staging: 'https://api.gm-g7.xyz/v1',
+  development: 'https://api.gm-g6.xyz/v1',
+};
 
 export interface GoMailerUser {
   email?: string;
@@ -101,15 +111,25 @@ class GoMailer {
     }
 
     try {
+      // Determine baseUrl from environment or explicit baseUrl
+      let baseUrl = config.baseUrl;
+      if (!baseUrl && config.environment) {
+        baseUrl = ENVIRONMENT_ENDPOINTS[config.environment];
+      }
+      if (!baseUrl) {
+        baseUrl = 'https://api.go-mailer.com/v1'; // Default to production
+      }
+
       // Set production defaults
       const finalConfig: GoMailerConfig = {
-        baseUrl: 'https://api.go-mailer.com/v1',
+        baseUrl,
         enableAnalytics: true,
         enableOfflineQueue: true,
         maxRetryAttempts: 3,
         retryDelayMs: 1000,
         logLevel: GoMailerLogLevel.INFO,
         ...config, // User config overrides defaults
+        baseUrl, // Ensure computed baseUrl is used
       };
 
       this.logLevel = finalConfig.logLevel || GoMailerLogLevel.INFO;
@@ -299,6 +319,16 @@ class GoMailer {
     if (!this.isInitialized) {
       throw new Error('Go Mailer SDK not initialized. Call initialize() first.');
     }
+  }
+
+  /**
+   * Get environment from baseUrl (for debugging/info purposes)
+   */
+  static getEnvironmentFromUrl(baseUrl: string): GoMailerEnvironment | 'custom' {
+    if (baseUrl.includes('go-mailer.com')) return 'production';
+    if (baseUrl.includes('gm-g7.xyz')) return 'staging';
+    if (baseUrl.includes('gm-g6.xyz')) return 'development';
+    return 'custom';
   }
 
   /**
