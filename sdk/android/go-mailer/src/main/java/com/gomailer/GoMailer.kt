@@ -13,7 +13,7 @@ class GoMailer private constructor() {
     
     companion object {
         private const val TAG = "GoMailer"
-        const val VERSION = "1.0.0"
+        const val VERSION = "1.1.0"
         private var instance: GoMailer? = null
         private var manager: GoMailerManager? = null
         private var isInitialized = false

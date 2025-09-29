@@ -5,6 +5,26 @@ All notable changes to the Go Mailer Push SDK for Android will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-01-23
+
+### Added
+- **Multi-environment support**: Choose between production, staging, and development environments
+- `GoMailerEnvironment` enum with predefined endpoints (PRODUCTION, STAGING, DEVELOPMENT)
+- `environment` parameter in `GoMailerConfig` for easy environment switching
+- `GoMailerEnvironment.fromUrl()` helper method for debugging
+- `getEffectiveBaseUrl()` method in `GoMailerConfig`
+- Backward compatibility with explicit `baseUrl` configuration
+
+### Changed
+- **Default endpoint**: Now defaults to production (`https://api.go-mailer.com/v1`)
+- Enhanced README with environment configuration examples
+- Improved logging shows active environment and endpoint
+
+### Migration Guide
+- Existing code continues to work without changes
+- To use environments: `GoMailerConfig(environment = GoMailerEnvironment.STAGING)`
+- Legacy ngrok URLs automatically upgrade to production
+
 ## [1.0.1] - 2025-01-23
 
 ### Added

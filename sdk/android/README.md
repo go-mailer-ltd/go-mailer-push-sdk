@@ -36,7 +36,7 @@ Add the dependency to your app's `build.gradle` (Module level):
 
 ```gradle
 dependencies {
-    implementation 'com.github.go-mailer-ltd:go-mailer-push-sdk:1.0.1'
+    implementation 'com.github.go-mailer-ltd:go-mailer-push-sdk:1.1.0'
 }
 ```
 
@@ -77,10 +77,40 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Initialize Go-Mailer SDK
+        // Initialize Go-Mailer SDK (defaults to production)
         GoMailer.initialize(this, "your-go-mailer-api-key")
     }
 }
+```
+
+### Environment Configuration
+
+The SDK supports multiple environments for testing:
+
+```kotlin
+// Production (default)
+val config = GoMailerConfig(
+    environment = GoMailerEnvironment.PRODUCTION // https://api.go-mailer.com/v1
+)
+GoMailer.initialize(this, "your-api-key", config)
+
+// Staging
+val config = GoMailerConfig(
+    environment = GoMailerEnvironment.STAGING // https://api.gm-g7.xyz/v1
+)
+GoMailer.initialize(this, "your-api-key", config)
+
+// Development
+val config = GoMailerConfig(
+    environment = GoMailerEnvironment.DEVELOPMENT // https://api.gm-g6.xyz/v1
+)
+GoMailer.initialize(this, "your-api-key", config)
+
+// Custom endpoint
+val config = GoMailerConfig(
+    baseUrl = "https://your-custom-endpoint.com/v1"
+)
+GoMailer.initialize(this, "your-api-key", config)
 ```
 
 **Step 2: Identify the user** (call when user logs in or you know their email)
