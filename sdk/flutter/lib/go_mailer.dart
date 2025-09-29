@@ -18,7 +18,7 @@ class GoMailer {
   GoMailer._();
 
   /// Get the current version of the SDK
-  static const String version = '1.0.0';
+  static const String version = '1.1.0';
 
   /// Get whether the SDK is initialized
   static bool get isInitialized => _isInitialized;
@@ -220,7 +220,8 @@ class GoMailerConfig {
     if (environment != null) {
       return _environmentEndpoints[environment!]!;
     }
-    return _environmentEndpoints[GoMailerEnvironment.production]!; // Default to production
+    return _environmentEndpoints[
+        GoMailerEnvironment.production]!; // Default to production
   }
 
   Map<String, dynamic> toMap() {

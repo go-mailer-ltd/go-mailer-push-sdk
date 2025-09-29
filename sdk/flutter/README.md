@@ -19,7 +19,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  go_mailer_push_sdk: ^1.0.0
+  go_mailer_push_sdk: ^1.1.0
 ```
 
 Then run:
@@ -45,8 +45,47 @@ flutter pub get
 ```dart
 import 'package:go_mailer_push_sdk/go_mailer.dart';
 
+// Initialize Go-Mailer SDK (defaults to production)
 await GoMailer.initialize(
   apiKey: 'your-go-mailer-api-key',
+);
+```
+
+### Environment Configuration
+
+The SDK supports multiple environments for testing:
+
+```dart
+// Production (default)
+await GoMailer.initialize(
+  apiKey: 'your-api-key',
+  config: GoMailerConfig(
+    environment: GoMailerEnvironment.production, // https://api.go-mailer.com/v1
+  ),
+);
+
+// Staging
+await GoMailer.initialize(
+  apiKey: 'your-api-key',
+  config: GoMailerConfig(
+    environment: GoMailerEnvironment.staging, // https://api.gm-g7.xyz/v1
+  ),
+);
+
+// Development
+await GoMailer.initialize(
+  apiKey: 'your-api-key',
+  config: GoMailerConfig(
+    environment: GoMailerEnvironment.development, // https://api.gm-g6.xyz/v1
+  ),
+);
+
+// Custom endpoint
+await GoMailer.initialize(
+  apiKey: 'your-api-key',
+  config: GoMailerConfig(
+    baseUrl: 'https://your-custom-endpoint.com/v1',
+  ),
 );
 ```
 

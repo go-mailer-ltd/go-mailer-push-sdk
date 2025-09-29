@@ -1,6 +1,6 @@
 name: go_mailer_push_sdk
 description: Go Mailer SDK for Flutter - Cross-platform customer engagement messaging and push notifications
-version: 1.0.0
+version: 1.1.0
 # publish_to: none # Removed for publication to pub.dev
 
 homepage: https://github.com/go-mailer/go-mailer-flutter
