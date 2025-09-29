@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private var userSent = false
     private var notificationsRequested = false
     private var eventsTracked = false
+    private var isInitialized = false
+    private var currentEnvironment = EnvironmentConfig.CURRENT_ENVIRONMENT
     
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -68,16 +70,21 @@ class MainActivity : AppCompatActivity() {
     
     private fun initializeGoMailer() {
         try {
+            val apiKey = ApiKeys.getApiKey(currentEnvironment)
+            val baseUrl = currentEnvironment.endpoint
+            
             Log.d(TAG, "🚀 Initializing Go-Mailer functionality")
-            Log.d(TAG, "🌍 Environment: ${EnvironmentConfig.CURRENT_ENVIRONMENT.displayName}")
-            Log.d(TAG, "✅ API Key set: ${API_KEY.take(10)}...")
-            Log.d(TAG, "🌐 Base URL set: $BASE_URL")
+            Log.d(TAG, "🌍 Environment: ${currentEnvironment.displayName}")
+            Log.d(TAG, "✅ API Key set: ${apiKey.take(10)}...")
+            Log.d(TAG, "🌐 Base URL set: $baseUrl")
             
             // Configure the Firebase service
-            GoMailerFirebaseMessagingService.setConfig(API_KEY, BASE_URL, null)
+            GoMailerFirebaseMessagingService.setConfig(apiKey, baseUrl, null)
             
-            Toast.makeText(this, "Go-Mailer initialized (${EnvironmentConfig.CURRENT_ENVIRONMENT.displayName})", Toast.LENGTH_SHORT).show()
+            isInitialized = true
+            Toast.makeText(this, "Go-Mailer initialized (${currentEnvironment.displayName})", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
+            isInitialized = false
             Log.e(TAG, "Failed to initialize Go-Mailer", e)
             Toast.makeText(this, "Initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
@@ -100,7 +107,44 @@ class MainActivity : AppCompatActivity() {
             trackSampleEvents()
         }
         
+        binding.btnSwitchEnvironment.setOnClickListener {
+            showEnvironmentSelector()
+        }
+        
+        updateEnvironmentUI()
         updateUI()
+    }
+    
+    private fun showEnvironmentSelector() {
+        EnvironmentSelectorDialog(this, currentEnvironment) { newEnvironment ->
+            handleEnvironmentChange(newEnvironment)
+        }.show()
+    }
+    
+    private fun handleEnvironmentChange(newEnvironment: Environment) {
+        currentEnvironment = newEnvironment
+        isInitialized = false
+        userSent = false
+        notificationsRequested = false
+        eventsTracked = false
+        
+        updateEnvironmentUI()
+        initializeGoMailer()
+        updateUI()
+    }
+    
+    private fun updateEnvironmentUI() {
+        binding.tvEnvironmentBadge.text = currentEnvironment.displayName
+        binding.tvEnvironmentEndpoint.text = currentEnvironment.endpoint
+        binding.tvEnvironmentDescription.text = currentEnvironment.description
+        
+        // Update badge color
+        val badgeColor = when (currentEnvironment) {
+            Environment.PRODUCTION -> ContextCompat.getColor(this, android.R.color.holo_green_dark)
+            Environment.STAGING -> ContextCompat.getColor(this, android.R.color.holo_orange_dark)
+            Environment.DEVELOPMENT -> ContextCompat.getColor(this, android.R.color.holo_blue_dark)
+        }
+        binding.tvEnvironmentBadge.setBackgroundColor(badgeColor)
     }
     
     private fun requestNotificationPermission() {
@@ -299,11 +343,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun sendEventToServer(eventName: String, properties: Map<String, Any>, email: String) {
         try {
-            val url = URL("$BASE_URL/events/push")
+            val apiKey = ApiKeys.getApiKey(currentEnvironment)
+            val baseUrl = currentEnvironment.endpoint
+            
+            val url = URL("$baseUrl/events/push")
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "POST"
             connection.setRequestProperty("Content-Type", "application/json")
-            connection.setRequestProperty("Authorization", "Bearer $API_KEY")
+            connection.setRequestProperty("Authorization", "Bearer $apiKey")
             connection.doOutput = true
 
             val body = JSONObject().apply {
@@ -333,13 +380,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI() {
         // Update button states
-        binding.btnRequestPermission.isEnabled = userSent
-        binding.btnTrackEvents.isEnabled = userSent
+        binding.btnTestCompleteFlow.isEnabled = isInitialized
+        binding.btnSendUserData.isEnabled = isInitialized
+        binding.btnRequestPermission.isEnabled = isInitialized && userSent
+        binding.btnTrackEvents.isEnabled = isInitialized && userSent
         
         // Update status text
-        binding.tvUserStatus.text = "User Data: ${if (userSent) "✅ Sent" else "❌ Not Sent"}"
-        binding.tvNotificationStatus.text = "Notifications: ${if (notificationsRequested) "✅ Requested" else "❌ Not Requested"}"
-        binding.tvEventStatus.text = "Click Tracking: ${if (eventsTracked) "✅ Ready" else "❌ Not Ready"}"
+        binding.tvUserStatus.text = "SDK Status: ${if (isInitialized) "✅ Initialized" else "❌ Not Initialized"}"
+        binding.tvNotificationStatus.text = "User Data: ${if (userSent) "✅ Sent" else "❌ Not Sent"}"
+        binding.tvEventStatus.text = "Notifications: ${if (notificationsRequested) "✅ Requested" else "❌ Not Requested"}"
     }
 
     private fun showSnack(message: String) {
@@ -349,11 +398,14 @@ class MainActivity : AppCompatActivity() {
     private suspend fun sendDeviceTokenToServer(token: String, email: String) {
         withContext(Dispatchers.IO) {
             try {
-                val url = URL("$BASE_URL/contacts")
+                val apiKey = ApiKeys.getApiKey(currentEnvironment)
+                val baseUrl = currentEnvironment.endpoint
+                
+                val url = URL("$baseUrl/contacts")
                 val connection = url.openConnection() as HttpURLConnection
                 connection.requestMethod = "POST"
                 connection.setRequestProperty("Content-Type", "application/json")
-                connection.setRequestProperty("Authorization", "Bearer $API_KEY")
+                connection.setRequestProperty("Authorization", "Bearer $apiKey")
                 connection.doOutput = true
 
                 val body = JSONObject().apply {
