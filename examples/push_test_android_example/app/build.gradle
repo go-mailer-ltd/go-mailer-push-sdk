@@ -48,8 +48,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     
-    // Go-Mailer SDK - temporarily commented out
-    // implementation project(':go-mailer')
+    // Go-Mailer SDK from JitPack
+    implementation 'com.github.go-mailer-ltd:go-mailer-push-sdk:android-v1.1.0'
     
     // HTTP client
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'

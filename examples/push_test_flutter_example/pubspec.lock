@@ -164,10 +164,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_mailer_push_sdk
-      sha256: ed46825fca05328fee775d427bd6bc978b158a200072f24e5a5f2733954f4069
+      sha256: "2ab42b468cae7e913c0bc03ef5481905b4e437467d187e49d4e6f7a73100c6eb"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   http:
     dependency: transitive
     description:

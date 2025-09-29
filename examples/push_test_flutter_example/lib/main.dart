@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_mailer_push_sdk/go_mailer.dart';
-import 'config.dart';
-import 'environment_selector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 // Background message handler
@@ -16,6 +14,25 @@ void main() async {
 
   // Register Firebase background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // Initialize SDK with production environment
+  const apiKey =
+      'R28tTWFpbGVyLTQ5NTExMjgwOTU1OC41NDI4LTQw'; // Production API key
+  print('🚀 Initializing GoMailer SDK with production environment');
+  print('🔑 API key: ${apiKey.substring(0, 10)}...');
+
+  try {
+    await GoMailer.initialize(
+      apiKey: apiKey,
+      config: GoMailerConfig(
+        enableAnalytics: true,
+        logLevel: GoMailerLogLevel.debug,
+      ),
+    );
+    print('✅ GoMailer SDK initialized successfully');
+  } catch (e) {
+    print('❌ Failed to initialize GoMailer SDK: $e');
+  }
 
   runApp(MyApp());
 }
@@ -40,57 +57,6 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
   final TextEditingController _emailController = TextEditingController();
   bool _notificationsRequested = false;
   bool _userSent = false;
-  bool _isInitialized = false;
-  GoMailerEnvironment _currentEnvironment = GoMailerEnvironment.production;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeSDK();
-  }
-
-  Future<void> _initializeSDK() async {
-    try {
-      final apiKey = ApiKeys.getApiKey(_currentEnvironment);
-
-      print(
-        '🚀 Initializing GoMailer SDK with environment: $_currentEnvironment',
-      );
-      print('🔑 API key: ${apiKey.substring(0, 10)}...');
-
-      await GoMailer.initialize(
-        apiKey: apiKey,
-        config: GoMailerConfig(
-          environment: _currentEnvironment,
-          enableAnalytics: true,
-          logLevel: GoMailerLogLevel.debug,
-        ),
-      );
-
-      setState(() {
-        _isInitialized = true;
-      });
-
-      print('✅ GoMailer SDK initialized successfully');
-      _showSnack('✅ SDK initialized ($_currentEnvironment)');
-    } catch (e) {
-      print('❌ Failed to initialize GoMailer SDK: $e');
-      _showSnack('❌ SDK initialization failed: $e');
-    }
-  }
-
-  Future<void> _handleEnvironmentChange(
-    GoMailerEnvironment newEnvironment,
-  ) async {
-    setState(() {
-      _currentEnvironment = newEnvironment;
-      _isInitialized = false;
-      _userSent = false;
-      _notificationsRequested = false;
-    });
-
-    await _initializeSDK();
-  }
 
   void _showSnack(String message) {
     ScaffoldMessenger.of(
@@ -241,9 +207,40 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            EnvironmentSelector(
-              currentEnvironment: _currentEnvironment,
-              onEnvironmentChanged: _handleEnvironmentChange,
+            Container(
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.green[50],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.green),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.check_circle, color: Colors.green),
+                      SizedBox(width: 8),
+                      Text(
+                        'Production Environment',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green[800],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    'https://api.go-mailer.com/v1',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'monospace',
+                      color: Colors.green[700],
+                    ),
+                  ),
+                ],
+              ),
             ),
             Text('Enter your email:'),
             SizedBox(height: 8),
@@ -257,9 +254,9 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
             ),
             SizedBox(height: 24),
             ElevatedButton(
-              onPressed: _isInitialized ? _testCompleteFlow : null,
+              onPressed: _testCompleteFlow,
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isInitialized ? Colors.green : Colors.grey,
+                backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 16),
               ),
@@ -272,9 +269,9 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
             ),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _isInitialized ? _sendUser : null,
+              onPressed: _sendUser,
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isInitialized ? Colors.blue : Colors.grey,
+                backgroundColor: Colors.blue,
                 foregroundColor: Colors.white,
               ),
               child: Text('1️⃣ Send User Data to Backend'),
@@ -313,9 +310,7 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    'SDK Status: ${_isInitialized ? "✅ Initialized" : "❌ Not Initialized"}',
-                  ),
+                  Text('SDK Status: ✅ Initialized (Production)'),
                   Text('User Data: ${_userSent ? "✅ Sent" : "❌ Not Sent"}'),
                   Text(
                     'Notifications: ${_notificationsRequested ? "✅ Requested" : "❌ Not Requested"}',
@@ -329,12 +324,10 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
             SizedBox(height: 16),
             Center(
               child: Text(
-                _isInitialized
-                    ? 'GoMailer SDK Ready! ($_currentEnvironment)'
-                    : 'Initializing SDK...',
+                'GoMailer SDK Ready! (Production)',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: _isInitialized ? Colors.green : Colors.orange,
+                  color: Colors.green,
                 ),
               ),
             ),
