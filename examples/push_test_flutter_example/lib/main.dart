@@ -52,8 +52,10 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
   Future<void> _initializeSDK() async {
     try {
       final apiKey = ApiKeys.getApiKey(_currentEnvironment);
-      
-      print('🚀 Initializing GoMailer SDK with environment: $_currentEnvironment');
+
+      print(
+        '🚀 Initializing GoMailer SDK with environment: $_currentEnvironment',
+      );
       print('🔑 API key: ${apiKey.substring(0, 10)}...');
 
       await GoMailer.initialize(
@@ -64,11 +66,11 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
           logLevel: GoMailerLogLevel.debug,
         ),
       );
-      
+
       setState(() {
         _isInitialized = true;
       });
-      
+
       print('✅ GoMailer SDK initialized successfully');
       _showSnack('✅ SDK initialized ($_currentEnvironment)');
     } catch (e) {
@@ -77,14 +79,16 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
     }
   }
 
-  Future<void> _handleEnvironmentChange(GoMailerEnvironment newEnvironment) async {
+  Future<void> _handleEnvironmentChange(
+    GoMailerEnvironment newEnvironment,
+  ) async {
     setState(() {
       _currentEnvironment = newEnvironment;
       _isInitialized = false;
       _userSent = false;
       _notificationsRequested = false;
     });
-    
+
     await _initializeSDK();
   }
 
@@ -309,7 +313,9 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  Text('SDK Status: ${_isInitialized ? "✅ Initialized" : "❌ Not Initialized"}'),
+                  Text(
+                    'SDK Status: ${_isInitialized ? "✅ Initialized" : "❌ Not Initialized"}',
+                  ),
                   Text('User Data: ${_userSent ? "✅ Sent" : "❌ Not Sent"}'),
                   Text(
                     'Notifications: ${_notificationsRequested ? "✅ Requested" : "❌ Not Requested"}',
@@ -323,7 +329,7 @@ class _GoMailerDemoPageState extends State<GoMailerDemoPage> {
             SizedBox(height: 16),
             Center(
               child: Text(
-                _isInitialized 
+                _isInitialized
                     ? 'GoMailer SDK Ready! ($_currentEnvironment)'
                     : 'Initializing SDK...',
                 style: TextStyle(

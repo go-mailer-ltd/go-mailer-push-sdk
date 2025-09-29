@@ -286,11 +286,21 @@ The example apps are pre-configured with the correct API keys for each environme
 | **Staging** | `R2FtYm8tMTU2Mjc3Njc2Mjg2My43ODI1LTI=` |
 | **Development** | `R2FtYm8tODAwNDQwMDcwNzc0LjI1NjUtMjcw` |
 
-### **Environment Selection:**
-- **React Native**: Use the in-app environment selector UI
-- **Flutter**: Change `environment` in `main.dart` (defaults to production)
-- **iOS**: Change `currentEnvironment` in `ContentView.swift` (defaults to production)
-- **Android**: Change `CURRENT_ENVIRONMENT` in `Config.kt` (defaults to production)
+### **🔄 Dynamic Environment Switching:**
+All platforms now support **one-tap environment switching** without code changes!
+
+- **React Native**: Tap environment selector → Choose environment → Automatic SDK reinitialization
+- **Flutter**: Tap "Switch" button → Select environment → Confirmation dialog → Auto-reinitialize  
+- **iOS**: Tap "Switch" button → Sheet selection → Alert confirmation → Auto-reinitialize
+- **Android**: Tap "Switch" button → Dialog selection → Confirmation → Auto-reinitialize
+
+**Visual Features:**
+- 🟢 **Production**: Green badge with live endpoint
+- 🟠 **Staging**: Orange badge with staging endpoint  
+- 🔵 **Development**: Blue badge with dev endpoint
+- ✅ **Confirmation dialogs** before switching environments
+- 🔄 **Automatic SDK reinitialization** with new API keys
+- 📊 **Status indicators** showing initialization state
 
 ---
 

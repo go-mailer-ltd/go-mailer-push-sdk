@@ -14,8 +14,9 @@ class EnvironmentSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentConfig = EnvironmentConfig.environments
-        .firstWhere((env) => env.environment == currentEnvironment);
+    final currentConfig = EnvironmentConfig.environments.firstWhere(
+      (env) => env.environment == currentEnvironment,
+    );
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -30,10 +31,7 @@ class EnvironmentSelector extends StatelessWidget {
                 SizedBox(width: 8),
                 Text(
                   'Environment',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Spacer(),
                 ElevatedButton(
@@ -60,7 +58,10 @@ class EnvironmentSelector extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: _getEnvironmentColor(currentEnvironment),
                           borderRadius: BorderRadius.circular(12),
@@ -90,10 +91,7 @@ class EnvironmentSelector extends StatelessWidget {
                   SizedBox(height: 4),
                   Text(
                     currentConfig.description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -129,7 +127,7 @@ class EnvironmentSelector extends StatelessWidget {
               itemBuilder: (context, index) {
                 final env = EnvironmentConfig.environments[index];
                 final isSelected = env.environment == currentEnvironment;
-                
+
                 return Card(
                   color: isSelected ? Colors.blue[50] : null,
                   child: ListTile(
@@ -150,13 +148,10 @@ class EnvironmentSelector extends StatelessWidget {
                     ),
                     title: Text(
                       env.endpoint,
-                      style: TextStyle(
-                        fontFamily: 'monospace',
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(fontFamily: 'monospace', fontSize: 14),
                     ),
                     subtitle: Text(env.description),
-                    trailing: isSelected 
+                    trailing: isSelected
                         ? Icon(Icons.check_circle, color: Colors.blue)
                         : null,
                     onTap: () {
@@ -181,9 +176,13 @@ class EnvironmentSelector extends StatelessWidget {
     );
   }
 
-  void _confirmEnvironmentChange(BuildContext context, GoMailerEnvironment newEnvironment) {
-    final newConfig = EnvironmentConfig.environments
-        .firstWhere((env) => env.environment == newEnvironment);
+  void _confirmEnvironmentChange(
+    BuildContext context,
+    GoMailerEnvironment newEnvironment,
+  ) {
+    final newConfig = EnvironmentConfig.environments.firstWhere(
+      (env) => env.environment == newEnvironment,
+    );
 
     showDialog(
       context: context,
