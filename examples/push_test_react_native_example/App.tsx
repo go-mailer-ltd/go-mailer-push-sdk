@@ -21,7 +21,7 @@ import {
 } from 'react-native';
 import {NativeModules} from 'react-native';
 import GoMailer, { GoMailerEnvironment } from 'go-mailer-push-sdk';
-import EnvironmentSelector from './EnvironmentSelector';
+import EnvironmentSelector, { API_KEYS } from './EnvironmentSelector';
 
 function App(): React.JSX.Element {
   const [email, setEmail] = useState('');
@@ -89,8 +89,9 @@ function App(): React.JSX.Element {
   const initializeSDK = async () => {
     try {
       setStatus('Initializing...');
+      const apiKey = API_KEYS[currentEnvironment];
       await GoMailer.initialize({
-        apiKey: 'TmF0aGFuLTg5NzI3NDY2NDgzMy42MzI2LTE=',
+        apiKey,
         environment: currentEnvironment,
       });
       setStatus(`SDK initialized successfully (${currentEnvironment})`);

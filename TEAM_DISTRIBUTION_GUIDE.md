@@ -278,16 +278,19 @@ firebase appdistribution:distribute app-release.apk \
 
 ## 🔑 **API Keys for Testing**
 
-Provide your team with appropriate API keys for each environment:
+The example apps are pre-configured with the correct API keys for each environment:
 
-```typescript
-// Example configuration for testers
-const API_KEYS = {
-  production: 'your-production-api-key',
-  staging: 'your-staging-api-key', 
-  development: 'your-development-api-key',
-};
-```
+| Environment | API Key |
+|-------------|---------|
+| **Production** | `R28tTWFpbGVyLTQ5NTExMjgwOTU1OC41NDI4LTQw` |
+| **Staging** | `R2FtYm8tMTU2Mjc3Njc2Mjg2My43ODI1LTI=` |
+| **Development** | `R2FtYm8tODAwNDQwMDcwNzc0LjI1NjUtMjcw` |
+
+### **Environment Selection:**
+- **React Native**: Use the in-app environment selector UI
+- **Flutter**: Change `environment` in `main.dart` (defaults to production)
+- **iOS**: Change `currentEnvironment` in `ContentView.swift` (defaults to production)
+- **Android**: Change `CURRENT_ENVIRONMENT` in `Config.kt` (defaults to production)
 
 ---
 

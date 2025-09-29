@@ -25,8 +25,9 @@ class MainActivity : AppCompatActivity() {
     
     companion object {
         private const val TAG = "MainActivity"
-        private const val API_KEY = "TmF0aGFuLTg5NzI3NDY2NDgzMy42MzI2LTE=" // Go-Mailer API key
-        private const val BASE_URL = "https://419c321798d9.ngrok-free.app/v1"
+        // Use environment-based configuration
+        private val API_KEY = EnvironmentConfig.apiKey
+        private val BASE_URL = EnvironmentConfig.baseUrl
     }
     
     private lateinit var binding: ActivityMainBinding
@@ -68,13 +69,14 @@ class MainActivity : AppCompatActivity() {
     private fun initializeGoMailer() {
         try {
             Log.d(TAG, "🚀 Initializing Go-Mailer functionality")
+            Log.d(TAG, "🌍 Environment: ${EnvironmentConfig.CURRENT_ENVIRONMENT.displayName}")
             Log.d(TAG, "✅ API Key set: ${API_KEY.take(10)}...")
             Log.d(TAG, "🌐 Base URL set: $BASE_URL")
             
             // Configure the Firebase service
             GoMailerFirebaseMessagingService.setConfig(API_KEY, BASE_URL, null)
             
-            Toast.makeText(this, "Go-Mailer initialized", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Go-Mailer initialized (${EnvironmentConfig.CURRENT_ENVIRONMENT.displayName})", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize Go-Mailer", e)
             Toast.makeText(this, "Initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_mailer_push_sdk/go_mailer.dart';
+import 'config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 // Background message handler
@@ -15,16 +16,20 @@ void main() async {
   // Register Firebase background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  const apiKey = 'TmF0aGFuLTg5NzI3NDY2NDgzMy42MzI2LTE=';
+  // Default to production environment - can be changed in the app
+  const environment = GoMailerEnvironment.production;
+  final apiKey = ApiKeys.getApiKey(environment);
+  
   print(
-    '🚀 Initializing GoMailer SDK with API key: ${apiKey.substring(0, 10)}...',
+    '🚀 Initializing GoMailer SDK with environment: $environment',
   );
+  print('🔑 API key: ${apiKey.substring(0, 10)}...');
 
   try {
     await GoMailer.initialize(
       apiKey: apiKey,
       config: GoMailerConfig(
-        // baseUrl defaults to production endpoint: https://api.go-mailer.com/v1
+        environment: environment,
         enableAnalytics: true,
         logLevel: GoMailerLogLevel.debug,
       ),

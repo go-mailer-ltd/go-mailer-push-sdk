@@ -37,6 +37,13 @@ const ENVIRONMENTS: EnvironmentOption[] = [
   },
 ];
 
+// API Keys for each environment
+export const API_KEYS = {
+  production: 'R28tTWFpbGVyLTQ5NTExMjgwOTU1OC41NDI4LTQw',
+  staging: 'R2FtYm8tMTU2Mjc3Njc2Mjg2My43ODI1LTI=',
+  development: 'R2FtYm8tODAwNDQwMDcwNzc0LjI1NjUtMjcw',
+} as const;
+
 interface Props {
   currentEnvironment: GoMailerEnvironment;
   onEnvironmentChange: (env: GoMailerEnvironment) => void;
