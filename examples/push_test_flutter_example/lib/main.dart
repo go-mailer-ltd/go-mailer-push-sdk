@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_mailer/go_mailer.dart';
+import 'package:go_mailer_push_sdk/go_mailer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:math';
 
 // Background message handler
 @pragma('vm:entry-point')
@@ -25,8 +24,7 @@ void main() async {
     await GoMailer.initialize(
       apiKey: apiKey,
       config: GoMailerConfig(
-        baseUrl:
-            'https://419c321798d9.ngrok-free.app/v1', // Using staging environment
+        // baseUrl defaults to production endpoint: https://api.go-mailer.com/v1
         enableAnalytics: true,
         logLevel: GoMailerLogLevel.debug,
       ),
