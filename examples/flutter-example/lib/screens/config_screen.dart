@@ -107,6 +107,15 @@ class _ConfigScreenState extends State<ConfigScreen> {
                   Hero(
                     tag: 'action_button',
                     child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                      ),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           Navigator.push(
