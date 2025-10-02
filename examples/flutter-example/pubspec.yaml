@@ -13,8 +13,11 @@ dependencies:
   permission_handler: ^11.3.0
   firebase_core: ^4.1.1
   firebase_messaging: ^16.0.2
-  go_mailer_push_sdk:
-    path: ../../sdk/flutter
+  # Use the published package to validate the live distribution instead of the local path.
+  # For local development against source, you can replace this with:
+  #   go_mailer_push_sdk:
+  #     path: ../../sdk/flutter
+  go_mailer_push_sdk: ^1.3.0
 
 dev_dependencies:
   flutter_test:

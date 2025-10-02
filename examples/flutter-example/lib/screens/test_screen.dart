@@ -24,6 +24,7 @@ class _TestScreenState extends State<TestScreen> {
   String? _successMessage;
   StreamSubscription<Map<String, dynamic>>? _eventSub;
   Map<String, dynamic>? _lastSdkEvent;
+  String? _deviceToken; // captured for display & manual backend testing
 
   @override
   void dispose() {
@@ -125,6 +126,11 @@ class _TestScreenState extends State<TestScreen> {
       // Get and log the device token for verification (may still be null)
       final deviceToken = await GoMailer.getDeviceToken();
       debugPrint('📱 Device Token: ${deviceToken ?? "Not available"}');
+      if (mounted) {
+        setState(() {
+          _deviceToken = deviceToken; // may be null initially
+        });
+      }
       if (deviceToken == null) {
         debugPrint('⚠️ Device token not available after registration');
         // don't throw here — we surface a helpful success message but warn user
@@ -240,6 +246,15 @@ class _TestScreenState extends State<TestScreen> {
                             label: 'Environment',
                             value: widget.environment,
                           ),
+                          if (_deviceToken != null) ...[
+                            const SizedBox(height: 8),
+                            _buildConfigItem(
+                              context,
+                              icon: Icons.phone_iphone,
+                              label: 'Device Token',
+                              value: _deviceToken!,
+                            ),
+                          ],
                         ],
                       ),
                     ),
