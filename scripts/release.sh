@@ -10,7 +10,7 @@ cd "$ROOT_DIR"
 echo "==> Pre-flight: version alignment"
 FLUTTER_VER=$(grep '^version:' sdk/flutter/pubspec.yaml | awk '{print $2}')
 ANDROID_VER=$(grep 'versionName' sdk/android/go-mailer/go-mailer/build.gradle | sed -E 's/.*versionName "([^"]+)".*/\1/')
-IOS_VER=$(grep 'spec.version' sdk/ios/GoMailerPushSDK.podspec | sed -E 's/.*= "([^"]+)"/\1/')
+IOS_VER=$(grep -E 'spec.version' sdk/ios/GoMailerPushSDK.podspec | head -1 | sed -E 's/.*= "([^"]+)".*/\1/')
 RN_VER=$(grep '"version":' sdk/react-native/package.json | head -1 | sed -E 's/.*"([0-9\.]+)".*/\1/')
 DART_CONST=$(grep "static const String version" sdk/flutter/lib/go_mailer.dart | sed -E "s/.*'([0-9\.]+)'.*/\1/")
 
