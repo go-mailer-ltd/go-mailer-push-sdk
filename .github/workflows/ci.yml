@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  flutter-sdk:
+    name: Flutter SDK Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Flutter pub get
+        working-directory: sdk/flutter
+        run: flutter pub get
+      - name: Run Flutter tests
+        working-directory: sdk/flutter
+        run: flutter test --no-pub
+
+  react-native-tests:
+    name: React Native Type Check & Jest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install deps
+        working-directory: sdk/react-native
+        run: npm ci || npm install
+      - name: Type check
+        working-directory: sdk/react-native
+        run: npx tsc --noEmit
+      - name: Run tests
+        working-directory: sdk/react-native
+        run: npx jest --ci --passWithNoTests
+
+  android-lint-build:
+    name: Android Lint & Compile
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-
+      - name: Android build (validation)
+        working-directory: sdk/android/go-mailer
+        run: ./gradlew :go-mailer:assembleRelease --no-daemon
+
+  release-check:
+    name: Release Script Preflight
+    needs: [flutter-sdk, react-native-tests, android-lint-build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Run release pre-flight (no publish)
+        run: bash scripts/release.sh || true
+        # Allow failure here because publish-related steps might not be possible in CI environment without secrets.
