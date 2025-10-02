@@ -104,17 +104,21 @@ dependencies: [
 ]
 ```
 
-### Android
+### Android (JitPack)
+Add JitPack repository and dependency (group uses GitHub style):
 ```gradle
-// Add to build.gradle
-implementation 'com.gomailer:go-mailer:1.0.0'
+// settings.gradle or dependencyResolutionManagement
+maven { url 'https://jitpack.io' }
+
+// module build.gradle
+implementation 'com.github.go-mailer-ltd:go-mailer-push-sdk:1.3.0'
 ```
 
 ### Flutter
 ```yaml
 # Add to pubspec.yaml
 dependencies:
-  go_mailer: ^1.0.0
+  go_mailer_push_sdk: ^1.3.0
 ```
 
 ### React Native
@@ -142,9 +146,9 @@ See `scripts/release.sh` for pre-flight checks. Summary steps:
 
 1. Tag & push: `git tag -a v1.3.0 -m "Go Mailer SDK 1.3.0" && git push origin v1.3.0`
 2. Flutter publish: `(cd sdk/flutter && dart pub publish)`
-3. Android (Maven Central): `(cd sdk/android/go-mailer && ./gradlew publishReleasePublicationToMavenCentralRepository)`
+3. Android (JitPack) — no action needed beyond tagging; consumers pull via JitPack.
 4. React Native: `(cd sdk/react-native && npm publish --access public)`
-5. (Optional) iOS standalone pod if maintained separately.
+5. iOS standalone pod: `(cd sdk/ios && pod trunk push GoMailerPushSDK.podspec --allow-warnings)`
 
 For CI automation, see `.github/workflows/ci.yml` and create a separate publish workflow gating on tags.
 
