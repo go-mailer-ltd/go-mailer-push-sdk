@@ -1,0 +1,8 @@
+# Minimal pubignore: keep only non-essential dev artifacts out of the package
+.dart_tool/
+build/
+test/**/goldens/
+**/*.iml
+.idea/
+.vscode/
+# Keep example fully (do NOT exclude) to allow pub scoring of example usage

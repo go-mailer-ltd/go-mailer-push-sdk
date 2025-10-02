@@ -1,5 +1,10 @@
 # Go Mailer SDK
 
+[![Build Status](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions)
+[![Pub Version](https://img.shields.io/pub/v/go_mailer_push_sdk)](https://pub.dev/packages/go_mailer_push_sdk)
+[![npm version](https://img.shields.io/npm/v/go-mailer)](https://www.npmjs.com/package/go-mailer)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A cross-platform mobile SDK for customer engagement messaging that enables businesses to receive push notifications from the Go-Mailer platform in their mobile apps.
 
 ## Features
@@ -8,7 +13,8 @@ A cross-platform mobile SDK for customer engagement messaging that enables busin
 - **Push Notification Registration**: Registers device and user with Go-Mailer backend
 - **Notification Handling**: Receives and displays push notifications sent from the Go-Mailer platform
 - **Analytics**: Tracks notification delivery, opens, and user events
-- **Security**: End-to-end encryption for message delivery
+- **Security & Privacy**: End-to-end encryption for message delivery, API key masking, email masking
+- **Reliability Layer**: Persistent offline event queue with backoff + jitter, queue capacity protection, structured event stream
 
 ## How It Works
 
@@ -112,6 +118,36 @@ dependencies:
 ```
 
 ### React Native
+
+## Current Release Versions
+
+| Platform | Version |
+|----------|---------|
+| Flutter Plugin | 1.3.0 |
+| Android Library | 1.3.0 |
+| iOS (via Flutter plugin podspec) | 1.3.0 |
+| React Native Package | 1.3.0 |
+
+## Reliability & Privacy Highlights (v1.3.0)
+
+- Structured event taxonomy (initialized, stream_ready, registered, event_queued, event_tracked, event_failed, event_dropped, notification_clicked)
+- Persistent queue (SharedPreferences / UserDefaults) with capacity cap (100) + drop signaling
+- Exponential backoff with jitter for network operations
+- API key & email masking; additional maskedEmail field in analytics payloads
+- Diagnostic API: getSdkInfo for runtime verification
+
+## Manual Publishing (Summary)
+
+See `scripts/release.sh` for pre-flight checks. Summary steps:
+
+1. Tag & push: `git tag -a v1.3.0 -m "Go Mailer SDK 1.3.0" && git push origin v1.3.0`
+2. Flutter publish: `(cd sdk/flutter && dart pub publish)`
+3. Android (Maven Central): `(cd sdk/android/go-mailer && ./gradlew publishReleasePublicationToMavenCentralRepository)`
+4. React Native: `(cd sdk/react-native && npm publish --access public)`
+5. (Optional) iOS standalone pod if maintained separately.
+
+For CI automation, see `.github/workflows/ci.yml` and create a separate publish workflow gating on tags.
+
 ```bash
 npm install go-mailer
 # or

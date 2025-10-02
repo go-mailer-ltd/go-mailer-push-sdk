@@ -1,0 +1,108 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to publish (must exist, e.g. v1.3.0)'
+        required: true
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Derive version from tag
+        id: ver
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          else
+            TAG_VERSION=${{ github.event.inputs.version }}
+          fi
+          echo "version=$TAG_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Validate versions alignment
+        run: bash scripts/release.sh
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Restore pub credentials (optional)
+        if: secrets.PUB_CREDENTIALS_JSON_B64 != ''
+        run: |
+          mkdir -p ~/.dart/pub-cache
+          echo "$PUB_CREDENTIALS_JSON_B64" | base64 -d > ~/.dart/pub-cache/credentials.json
+        env:
+          PUB_CREDENTIALS_JSON_B64: ${{ secrets.PUB_CREDENTIALS_JSON_B64 }}
+
+      - name: Publish Flutter package
+        working-directory: sdk/flutter
+        run: dart pub publish -f
+        env:
+          PUB_ENVIRONMENT: ci
+
+      - name: Setup Java for Android
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Import GPG + Gradle props
+        if: secrets.GPG_SECRET_KEY_B64 != ''
+        env:
+          GPG_SECRET_KEY_B64: ${{ secrets.GPG_SECRET_KEY_B64 }}
+          SIGNING_KEY_PASSPHRASE: ${{ secrets.SIGNING_KEY_PASSPHRASE }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        run: |
+          echo "$GPG_SECRET_KEY_B64" | base64 -d > secret.asc
+          gpg --batch --import secret.asc
+          KEYID=$(gpg --list-secret-keys --keyid-format SHORT | grep -A1 '^sec' | tail -1 | awk '{print $1}')
+          mkdir -p ~/.gradle
+          cat >> ~/.gradle/gradle.properties <<EOF
+signing.keyId=$KEYID
+signing.password=$SIGNING_KEY_PASSPHRASE
+ossrhUsername=$OSSRH_USERNAME
+ossrhPassword=$OSSRH_PASSWORD
+EOF
+          gpg --export-secret-keys $KEYID > $HOME/gpg-secret.gpg
+          echo "signing.secretKeyRingFile=$HOME/gpg-secret.gpg" >> ~/.gradle/gradle.properties
+
+      - name: Publish Android (Maven Central)
+        if: secrets.OSSRH_USERNAME != ''
+        working-directory: sdk/android/go-mailer
+        run: ./gradlew publishReleasePublicationToMavenCentralRepository --no-daemon
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Configure npm auth
+        if: secrets.NPM_TOKEN != ''
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+
+      - name: Publish React Native package
+        if: secrets.NPM_TOKEN != ''
+        working-directory: sdk/react-native
+        run: npm publish --access public
+
+      - name: Summary
+        run: |
+          echo "Published version: ${{ steps.ver.outputs.version }}" 
+          echo "Check propagation manually (pub.dev, Maven Central, npm)." 

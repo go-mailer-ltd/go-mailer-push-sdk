@@ -64,6 +64,5 @@ examples/**/ios/Podfile.lock
 # Keep lock for top-level packages where desired (Flutter plugin example uses its own)
 !/sdk/flutter/example/pubspec.lock
 
-# Ignore legacy/unmaintained standalone iOS SDK template (superseded by unified implementation)
-sdk/ios/GoMailerPushSDK/
+# (Retained) iOS native SDK sources now part of release, so do not ignore.
 
