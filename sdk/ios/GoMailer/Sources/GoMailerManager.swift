@@ -60,7 +60,7 @@ class GoMailerManager: NSObject {
         storageManager.saveUser(user)
         
         // Send user data to backend
-        let payload = ["email": user.email ?? ""]
+    let payload = ["email": user.email ?? ""]
         
         networkManager.sendRequest(
             endpoint: "/contacts",
@@ -203,8 +203,8 @@ class GoMailerManager: NSObject {
                 "appVersion": Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
             ]
         ]
-        
-        print("Go Mailer: Registering device token with payload: \(payload)")
+        // Explicit stringify optionals for clearer logging & avoid optional debug interpolation warnings
+        print("Go Mailer: Registering device token with payload: \(String(describing: payload))")
         
         networkManager.sendRequest(
             endpoint: "/contacts",
@@ -265,9 +265,9 @@ extension GoMailerManager: PushNotificationManagerDelegate {
         let title = notification.request.content.title
         let body = notification.request.content.body
         
-        print("Go Mailer: 👆 Notification clicked! ID: \(notificationId)")
-        print("Go Mailer: 👆 Title: \(title)")
-        print("Go Mailer: 👆 Body: \(body)")
+    print("Go Mailer: 👆 Notification clicked! ID: \(notificationId)")
+    print("Go Mailer: 👆 Title: \(String(describing: title))")
+    print("Go Mailer: 👆 Body: \(String(describing: body))")
         
         // Track the notification click event (only when user taps the notification)
         if response.actionIdentifier == UNNotificationDefaultActionIdentifier {
@@ -288,8 +288,7 @@ extension GoMailerManager: PushNotificationManagerDelegate {
             "clicked_timestamp": ISO8601DateFormatter().string(from: Date()),
             "platform": "ios"
         ]
-        
-        var eventData = [
+        let eventData = [
             "email": currentUser?.email ?? "",
             "eventName": "notification_clicked",
             "properties": properties,

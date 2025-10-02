@@ -35,6 +35,7 @@ Release Date: 2025-10-02
 - Android consumers now use JitPack coordinate `com.github.go-mailer-ltd:go-mailer-push-sdk:1.3.0`
 - React Native consumers install `go-mailer-push-sdk@1.3.0`
 - Native iOS integration (non-Flutter) can adopt `GoMailerPushSDK` pod once trunk pushed.
+ - Native iOS integration (non-Flutter) now available via CocoaPods: `pod 'GoMailerPushSDK', '~> 1.3.0'`.
 
 ## Verification Checklist
 - [x] Flutter tests green

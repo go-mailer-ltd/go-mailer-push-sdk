@@ -1,6 +1,7 @@
 # Go Mailer SDK
 
 [![Build Status](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions)
+[![CocoaPods](https://img.shields.io/cocoapods/v/GoMailerPushSDK.svg)](https://cocoapods.org/pods/GoMailerPushSDK)
 [![Pub Version](https://img.shields.io/pub/v/go_mailer_push_sdk)](https://pub.dev/packages/go_mailer_push_sdk)
 [![npm version](https://img.shields.io/npm/v/go-mailer)](https://www.npmjs.com/package/go-mailer)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -93,15 +94,23 @@ await GoMailer.setUser({ email: 'user-email' });
 
 ## Installation
 
-### iOS
-```bash
-# Using CocoaPods
-pod 'GoMailer'
+### iOS (CocoaPods)
+```ruby
+target 'YourAppTarget' do
+  pod 'GoMailerPushSDK', '~> 1.3.0'
+end
+```
 
-# Using Swift Package Manager
-dependencies: [
-    .package(url: "https://github.com/your-org/go-mailer-ios.git", from: "1.0.0")
-]
+Then:
+```bash
+pod install
+```
+
+After installation import and initialize:
+```swift
+import GoMailer
+
+GoMailer.initialize(apiKey: "your-api-key")
 ```
 
 ### Android (JitPack)
@@ -129,7 +138,7 @@ dependencies:
 |----------|---------|
 | Flutter Plugin | 1.3.0 |
 | Android Library | 1.3.0 |
-| iOS (via Flutter plugin podspec) | 1.3.0 |
+| iOS (CocoaPods) | 1.3.0 |
 | React Native Package | 1.3.0 |
 
 ## Reliability & Privacy Highlights (v1.3.0)
