@@ -65,9 +65,19 @@ jobs:
         working-directory: sdk/android/go-mailer
         run: ./gradlew :go-mailer:assembleRelease --no-daemon
 
+  ios-swiftlint:
+    name: iOS Swift Lint
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SwiftLint
+        run: brew install swiftlint || true
+      - name: Run SwiftLint
+        run: swiftlint --config .swiftlint.yml || true
+
   release-check:
     name: Release Script Preflight
-    needs: [flutter-sdk, react-native-tests, android-lint-build]
+    needs: [flutter-sdk, react-native-tests, android-lint-build, ios-swiftlint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

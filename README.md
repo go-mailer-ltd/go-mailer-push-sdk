@@ -1,6 +1,7 @@
 # Go Mailer SDK
 
 [![Build Status](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/go-mailer-ltd/go-mailer-push-sdk/actions)
+[![JitPack](https://jitpack.io/v/go-mailer-ltd/go-mailer-push-sdk.svg)](https://jitpack.io/#go-mailer-ltd/go-mailer-push-sdk)
 [![CocoaPods](https://img.shields.io/cocoapods/v/GoMailerPushSDK.svg)](https://cocoapods.org/pods/GoMailerPushSDK)
 [![Pub Version](https://img.shields.io/pub/v/go_mailer_push_sdk)](https://pub.dev/packages/go_mailer_push_sdk)
 [![npm version](https://img.shields.io/npm/v/go-mailer)](https://www.npmjs.com/package/go-mailer)
