@@ -1,0 +1,109 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+}
+
+android {
+    namespace 'com.gomailer'
+    compileSdk 34
+
+    defaultConfig {
+        // Firebase & messaging features require >=23
+        minSdk 23
+        targetSdk 34
+
+        versionCode 3
+    versionName "1.3.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+
+    // Keep NDK aligned with other modules & Firebase expectations
+    ndkVersion "27.0.12077973"
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+
+    // Firebase BOM (centralize versions)
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation 'com.google.firebase:firebase-messaging'
+
+    // HTTP client
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1'
+
+    // Unit Testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.jetbrains.kotlin:kotlin-test:1.9.25'
+    testImplementation 'io.mockk:mockk:1.13.12'
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1'
+    testImplementation 'org.robolectric:robolectric:4.12.2'
+    testImplementation 'androidx.test:core:1.6.1'
+    testImplementation 'androidx.test.ext:junit:1.2.1'
+
+    // Instrumented UI Testing
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test:rules:1.6.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                
+                groupId = 'com.github.go-mailer-ltd'
+                artifactId = 'go-mailer-push-sdk'
+                version = '1.3.0'
+                
+                pom {
+                    name = 'Go Mailer Push SDK'
+                    description = 'Android SDK for receiving push notifications from Go-Mailer'
+                    url = 'https://github.com/go-mailer-ltd/go-mailer-push-sdk'
+                    
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'https://opensource.org/licenses/MIT'
+                        }
+                    }
+                    
+                    developers {
+                        developer {
+                            id = 'go-mailer'
+                            name = 'Go-Mailer Ltd'
+                            email = 'support@go-mailer.com'
+                        }
+                    }
+                    
+                    scm {
+                        connection = 'scm:git:git://github.com/go-mailer-ltd/go-mailer-push-sdk.git'
+                        developerConnection = 'scm:git:ssh://github.com/go-mailer-ltd/go-mailer-push-sdk.git'
+                        url = 'https://github.com/go-mailer-ltd/go-mailer-push-sdk'
+                    }
+                }
+            }
+        }
+    }
+} 

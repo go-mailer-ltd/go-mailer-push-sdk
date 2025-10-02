@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37848884203",
+    "project_id": "gm-flutter-test",
+    "storage_bucket": "gm-flutter-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37848884203:android:99aa215ac2871e91316fae",
+        "android_client_info": {
+          "package_name": "com.gomailer.gomailer_flutter_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZTlPO59v2M1lsh9MQ5GS_3xnrTS9Deq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

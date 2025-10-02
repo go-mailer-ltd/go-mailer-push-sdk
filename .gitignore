@@ -4,6 +4,7 @@
 **/build/
 **/dist/
 **/outputs/
+builds/
 **/DerivedData/
 **/.dart_tool/
 **/.flutter-plugins
@@ -37,6 +38,7 @@
 .vscode/
 .idea/
 .DS_Store
+**/.metadata
 
 # Artifacts / archives
 *.hprof
@@ -61,4 +63,7 @@ examples/**/ios/Podfile.lock
 
 # Keep lock for top-level packages where desired (Flutter plugin example uses its own)
 !/sdk/flutter/example/pubspec.lock
+
+# Ignore legacy/unmaintained standalone iOS SDK template (superseded by unified implementation)
+sdk/ios/GoMailerPushSDK/
 
