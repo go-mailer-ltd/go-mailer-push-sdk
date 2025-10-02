@@ -1,0 +1,64 @@
+# Root ignore rules for Go Mailer multi-SDK repo
+
+# Build & output
+**/build/
+**/dist/
+**/outputs/
+**/DerivedData/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+
+# Platform specific
+**/.gradle/
+**/gradlew*
+**/local.properties
+**/Pods/
+**/Podfile.lock
+**/xcuserdata/
+**/*.xcworkspace/
+**/*.xcodeproj/project.xcworkspace/
+**/*.xcodeproj/xcuserdata/
+
+# Node / JS
+**/node_modules/
+**/npm-debug.log*
+**/yarn-error.log
+
+# Logs / temp
+*.log
+*.tmp
+*.swp
+*.swo
+*.lock
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Artifacts / archives
+*.hprof
+*.ipa
+*.apk
+*.aab
+
+# Backup or generated variants
+*.bak
+*.orig
+*.rej
+*.new
+
+# Secrets (example pattern, ensure real secrets never committed)
+.env
+.env.*
+
+# Flutter example ephemeral
+examples/**/pubspec.lock
+examples/**/android/local.properties
+examples/**/ios/Podfile.lock
+
+# Keep lock for top-level packages where desired (Flutter plugin example uses its own)
+!/sdk/flutter/example/pubspec.lock
+
