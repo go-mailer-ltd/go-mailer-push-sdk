@@ -18,7 +18,9 @@ Pod::Spec.new do |spec|
   spec.source       = { :git => "https://github.com/go-mailer-ltd/go-mailer-push-sdk.git", :tag => "v#{spec.version}" }
   # Source files path is relative to the podspec location (sdk/ios)
   # Actual sources live at sdk/ios/GoMailer/Sources/*.swift
-  spec.source_files = "GoMailer/Sources/**/*.swift"
+  # Use a recursive glob so whether the podspec is evaluated from repo root (trunk) or this subfolder (local lint)
+  # it still resolves the Swift sources under sdk/ios/GoMailer/Sources
+  spec.source_files = "**/GoMailer/Sources/**/*.swift"
 
   spec.frameworks   = "UIKit", "UserNotifications", "Foundation"
   spec.requires_arc = true
