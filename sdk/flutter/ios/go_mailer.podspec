@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'go_mailer'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin project.'
+  s.version          = '1.2.0'
+  s.summary          = 'Go Mailer Core (legacy placeholder)'
   s.description      = <<-DESC
-A new Flutter plugin project.
+Legacy placeholder podspec. Prefer using go_mailer_push_sdk for production integrations.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://go-mailer.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'GoMailer' => 'support@go-mailer.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

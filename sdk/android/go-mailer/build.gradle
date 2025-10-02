@@ -1,99 +1,28 @@
-plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-}
-
-android {
-    namespace 'com.gomailer'
-    compileSdk 34
-
-    defaultConfig {
-        minSdk 16
-        targetSdk 34
-        
-        versionCode 1
-        versionName "1.1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
-
-dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    
-    // Firebase
-    implementation platform('com.google.firebase:firebase-bom:32.7.0')
-    implementation 'com.google.firebase:firebase-messaging'
-    
-    // HTTP client
-    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    
-    // JSON
-    implementation 'org.json:json:20231013'
-    
-    // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3'
-    
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-}
-
-afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                
-                groupId = 'com.github.go-mailer-ltd'
-                artifactId = 'go-mailer-push-sdk'
-                version = '1.1.0'
-                
-                pom {
-                    name = 'Go Mailer Push SDK'
-                    description = 'Android SDK for receiving push notifications from Go-Mailer'
-                    url = 'https://github.com/go-mailer-ltd/go-mailer-push-sdk'
-                    
-                    licenses {
-                        license {
-                            name = 'MIT License'
-                            url = 'https://opensource.org/licenses/MIT'
-                        }
-                    }
-                    
-                    developers {
-                        developer {
-                            id = 'go-mailer'
-                            name = 'Go-Mailer Ltd'
-                            email = 'support@go-mailer.com'
-                        }
-                    }
-                    
-                    scm {
-                        connection = 'scm:git:git://github.com/go-mailer-ltd/go-mailer-push-sdk.git'
-                        developerConnection = 'scm:git:ssh://github.com/go-mailer-ltd/go-mailer-push-sdk.git'
-                        url = 'https://github.com/go-mailer-ltd/go-mailer-push-sdk'
-                    }
-                }
+buildscript {
+    repositories {
+        google()
+        mavenCentral {
+            content {
+                includeGroup("org.jetbrains.kotlin")
+                includeGroup("com.android.tools.build")
             }
         }
+        gradlePluginPortal()
     }
-} 
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.2'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.10'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // For older dependencies
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

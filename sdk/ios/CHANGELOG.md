@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0] - 2025-10-02
+
+### Added
+- Structured event stream & retry/backoff parity with Android.
+- Pre-token event queue persisted to disk (UserDefaults) with 100 event cap (drops oldest -> `event_dropped`).
+- `getSdkInfo` parity via Flutter bridge.
+
+### Changed
+- Version synchronized to 1.3.0 across platforms.
+
+### Fixed
+- Potential lost events on cold start before token registration (now restored & flushed after registration).
+
 ## [1.1.0] - 2025-01-23
 
 ### Added

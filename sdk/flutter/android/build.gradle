@@ -1,5 +1,5 @@
-group = "com.example.go_mailer"
-version = "1.0-SNAPSHOT"
+group = "com.gomailer.go_mailer"
+version = "1.3.0"
 
 buildscript {
     ext.kotlin_version = "2.1.0"
@@ -25,7 +25,7 @@ apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
 
 android {
-    namespace = "com.example.go_mailer"
+    namespace = "com.gomailer.go_mailer"
 
     compileSdk = 35
 
@@ -44,14 +44,12 @@ android {
     }
 
     defaultConfig {
-        minSdk = 21
+        // Align with firebase_messaging (requires at least 23)
+        minSdk = 23
     }
 
-    dependencies {
-        implementation("com.google.firebase:firebase-messaging:23.4.0")
-        testImplementation("org.jetbrains.kotlin:kotlin-test")
-        testImplementation("org.mockito:mockito-core:5.0.0")
-    }
+    // Ensure NDK version consistency with consuming app
+    ndkVersion = "27.0.12077973"
 
     testOptions {
         unitTests.all {
@@ -64,4 +62,21 @@ android {
             }
         }
     }
+}
+
+// Dependencies MUST be declared at top-level (outside android { })
+dependencies {
+    // Firebase messaging (explicit version since not using BOM here)
+    implementation("com.google.firebase:firebase-messaging:23.4.0")
+
+    // Networking (required by GoMailerPlugin refactor)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
+    // Coroutines for async operations & Play Services await
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1")
+
+    // Unit testing
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.mockito:mockito-core:5.0.0")
 }

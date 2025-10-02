@@ -18,7 +18,8 @@ class GoMailer {
   GoMailer._();
 
   /// Get the current version of the SDK
-  static const String version = '1.1.0';
+  // Keep in sync with pubspec.yaml version
+  static const String version = '1.3.0';
 
   /// Get whether the SDK is initialized
   static bool get isInitialized => _isInitialized;
@@ -118,6 +119,16 @@ class GoMailer {
     }
   }
 
+  /// Flush any pending queued events (currently relevant for Android reliability layer)
+  static Future<void> flushPendingEvents() async {
+    _checkInitialization();
+    try {
+      await _channel.invokeMethod('flushPendingEvents');
+    } catch (e) {
+      _log('Failed to flush pending events: $e', GoMailerLogLevel.warn);
+    }
+  }
+
   /// Track notification click event
   ///
   /// This method should be called when the app is opened from a notification
@@ -159,6 +170,18 @@ class GoMailer {
     } catch (e) {
       debugPrint('Go Mailer: Failed to get device token: $e');
       return null;
+    }
+  }
+
+  /// Get SDK diagnostic info (version, baseUrl, email, deviceToken)
+  static Future<Map<String, dynamic>> getSdkInfo() async {
+    _checkInitialization();
+    try {
+      final info = await _channel.invokeMapMethod<String, dynamic>('getSdkInfo');
+      return info ?? <String, dynamic>{};
+    } catch (e) {
+      _log('Failed to get SDK info: $e', GoMailerLogLevel.warn);
+      return <String, dynamic>{};
     }
   }
 

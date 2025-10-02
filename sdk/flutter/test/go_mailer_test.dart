@@ -1,28 +1,58 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_mailer_push_sdk/go_mailer.dart';
-import 'package:go_mailer_push_sdk/go_mailer_platform_interface.dart';
-import 'package:go_mailer_push_sdk/go_mailer_method_channel.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
-class MockGoMailerPlatform
-    with MockPlatformInterfaceMixin
-    implements GoMailerPlatform {
-  @override
-  Future<String?> getPlatformVersion() => Future.value('42');
-}
 
 void main() {
-  final GoMailerPlatform initialPlatform = GoMailerPlatform.instance;
+  TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('$MethodChannelGoMailer is the default instance', () {
-    expect(initialPlatform, isInstanceOf<MethodChannelGoMailer>());
+  const MethodChannel channel = MethodChannel('go_mailer');
+  final List<MethodCall> log = <MethodCall>[];
+
+  setUp(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (MethodCall methodCall) async {
+      log.add(methodCall);
+      switch (methodCall.method) {
+        case 'initialize':
+          return null;
+        case 'getDeviceToken':
+          return 'test-device-token';
+        default:
+          return null;
+      }
+    });
   });
 
-  test('getPlatformVersion', () async {
-    GoMailer goMailerPlugin = GoMailer();
-    MockGoMailerPlatform fakePlatform = MockGoMailerPlatform();
-    GoMailerPlatform.instance = fakePlatform;
+  tearDown(() {
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, null);
+    log.clear();
+  });
 
-    expect(await goMailerPlugin.getPlatformVersion(), '42');
+  test('initialize and get device token', () async {
+    await GoMailer.initialize(
+      apiKey: 'test-api-key',
+      config: GoMailerConfig(
+        apiKey: 'test-api-key',
+        environment: GoMailerEnvironment.development,
+      ),
+    );
+    expect(await GoMailer.isInitialized, true);
+
+    final token = await GoMailer.getDeviceToken();
+    expect(token, 'test-device-token');
+
+    expect(log, [
+      isMethodCall('initialize', arguments: {
+        'apiKey': 'test-api-key',
+        'config': {
+          'apiKey': 'test-api-key',
+          'baseUrl': 'https://api.gm-g6.xyz/v1',
+          'enableAnalytics': true,
+          'logLevel': 1,
+        },
+      }),
+      isMethodCall('getDeviceToken', arguments: null),
+    ]);
   });
 }

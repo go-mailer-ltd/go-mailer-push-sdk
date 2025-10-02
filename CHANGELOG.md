@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - 2024-01-XX
 
+## [1.3.0] - 2025-10-02
+
+### Added
+- Cross-platform (Android + iOS + Flutter bridge) reliability parity: exponential backoff, pre-token queue, disk persistence.
+- Queue size cap (100) with `event_dropped` telemetry.
+- `getSdkInfo` diagnostic method (Flutter) and `maskedEmail` field in payloads.
+- Basic email masking of logs + network payload duplication via `maskedEmail`.
+
+### Changed
+- Unified version 1.3.0 across all distributed artifacts (Flutter, Android, iOS, React Native).
+- Updated documentation to reflect privacy & persistence features.
+
+### Fixed
+- Potential unbounded growth of pre-token event memory queue.
+- Lost events on iOS cold start before token registration.
+
+### Security / Privacy
+- Introduced masking for user emails in logs and added masked representation in network requests.
+
+### Migration
+- No breaking API changes from 1.2.x -> 1.3.0. Optional adoption of `getSdkInfo`.
+
+
 ### Added
 - **Initial release of Go Mailer SDK**
 - **Cross-platform push notifications** for iOS, Android, Flutter, and React Native

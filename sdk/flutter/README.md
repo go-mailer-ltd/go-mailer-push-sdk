@@ -19,7 +19,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  go_mailer_push_sdk: ^1.1.0
+  go_mailer_push_sdk: ^1.3.0
 ```
 
 Then run:
@@ -164,6 +164,50 @@ await GoMailer.trackEvent('button_clicked', {
 ```dart
 // Get the device token (for debugging)
 String? token = await GoMailer.getDeviceToken();
+```
+
+### 7. Flush Pending Events (Reliability)
+```dart
+await GoMailer.flushPendingEvents();
+```
+For Android the SDK may queue events if called before the device token is registered. This method triggers an immediate flush attempt. (No-op on iOS for now.)
+
+## Runtime Events & Reliability
+
+The SDK emits structured events through the `go_mailer_events` EventChannel. Subscribe to the stream for diagnostics:
+
+| Type | Meaning |
+|------|---------|
+| `stream_ready` | Event stream attached from Flutter side |
+| `initialized` | Native layer initialized with provided configuration |
+| `registered` | Device token successfully obtained & sent (Android) |
+| `register_failed` | Failed to obtain device token (platform error) |
+| `token_failed` | Token POST to backend failed (non-retryable or exhausted retries) |
+| `event_queued` | Event queued (waiting for token) |
+| `event_tracked` | Event delivered successfully |
+| `event_failed` | Event delivery failed (non-retryable or exhausted retries) |
+| `event_dropped` | An older queued event was dropped due to queue capacity |
+
+Reliability & Privacy Enhancements (>=1.3.0):
+- Exponential backoff (500ms base, x2 factor, jitter up to 150ms, max 5 attempts) for token & event submissions on transient errors (429, 5xx, network timeouts) on BOTH Android & iOS.
+- Pre-token event queue on both platforms (events tracked before registration are queued then flushed once token is registered or via `flushPendingEvents()`).
+- Persistent disk-backed queue (Android: SharedPreferences, iOS: UserDefaults) survives app restarts/crashes.
+- Queue size capped at 100 events; oldest is dropped with `event_dropped` emitted.
+- Automatic basic email masking in logs & network payloads (`maskedEmail` field) to reduce PII exposure (original `email` still sent for association; configurable masking toggle planned).
+- OkHttp (Android) / URLSession (iOS) with explicit timeouts.
+
+Roadmap:
+- Configurable queue size & retention policy.
+- Additional sensitive field masking (e.g. emails by configuration toggle).
+- Metrics / health pings API.
+
+Example listener:
+```dart
+GoMailer.pushNotificationStream.listen((e) {
+  final type = e['type'];
+  final data = e['data'];
+  debugPrint('GoMailer SDK Event: $type => $data');
+});
 ```
 
 ## How Go-Mailer Sends Notifications

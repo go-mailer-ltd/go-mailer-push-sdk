@@ -5,7 +5,40 @@ All notable changes to the Go Mailer Push SDK for Android will be documented in 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-10-02
+
+### Added
+- Persistent disk-backed event queue (SharedPreferences) with 100 event cap & oldest drop policy (`event_dropped`).
+- Parity with iOS for retry/backoff & pre-token queue semantics.
+- `getSdkInfo` method when accessed via Flutter plugin.
+
+### Changed
+- Version bump to 1.3.0.
+
+### Fixed
+- Potential unbounded queue growth before token registration.
+
 ## [1.1.0] - 2025-01-23
+## [1.2.0] - 2025-10-02
+
+### Added
+- Structured EventChannel interoperability (when used via Flutter plugin) emitting: `initialized`, `stream_ready`, `registered`, `register_failed`, `token_failed`, `event_queued`, `event_tracked`, `event_failed`, `notification_clicked`.
+- Exponential backoff with jitter for device token and event submission (retries on 429 & 5xx + network errors).
+- In-memory pre-token event queue with manual flush API (`flushPendingEvents`).
+
+### Changed
+- Replaced raw HttpURLConnection logic with OkHttp + Coroutines for consistent timeout & retry control.
+- Standardized minimum supported Android API level to 23 (Firebase Messaging alignment).
+- Dynamic bundleId extraction from application context.
+
+### Known Limitations
+- Event queue is in-memory only (not persisted across process restarts).
+
+### Migration
+- Raise your application `minSdkVersion` to 23 if still below.
+- No breaking API changes; all new capabilities are additive.
+
+---
 
 ### Added
 - **Multi-environment support**: Choose between production, staging, and development environments

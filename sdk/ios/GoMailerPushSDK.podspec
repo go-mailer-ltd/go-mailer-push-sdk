@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "GoMailerPushSDK"
-  spec.version      = "1.1.0"
+  spec.version      = "1.3.0"
   spec.summary      = "Receive push notifications from Go-Mailer in your iOS app"
   spec.description  = <<-DESC
     Go-Mailer Push SDK for iOS handles device registration, user identification, 
@@ -21,9 +21,9 @@ Pod::Spec.new do |spec|
   spec.frameworks   = "UIKit", "UserNotifications", "Foundation"
   spec.requires_arc = true
 
-  # Optional Firebase dependencies - users can include these in their main project
-  # spec.dependency "Firebase/Core"
-  # spec.dependency "Firebase/Messaging"
+  # Firebase dependencies
+  spec.dependency "Firebase/Core", "~> 10.25.0"
+  spec.dependency "Firebase/Messaging", "~> 10.25.0"
   
   spec.documentation_url = "https://docs.go-mailer.com/ios"
 end
