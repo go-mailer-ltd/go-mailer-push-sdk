@@ -64,7 +64,8 @@ builds/
 **/signing.properties
 
 # Internal Documentation (Move to Private Repository)
-internal-docs/
+internal-docs/*
+!internal-docs/README.md
 
 # Flutter example ephemeral
 examples/**/pubspec.lock
