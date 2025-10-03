@@ -52,9 +52,19 @@ builds/
 *.rej
 *.new
 
-# Secrets (example pattern, ensure real secrets never committed)
+# Secrets & Credentials (NEVER COMMIT THESE!)
 .env
 .env.*
+**/google-services.json
+**/GoogleService-Info.plist
+**/*.keystore
+**/*.jks
+**/*.p12
+**/*.mobileprovision
+**/signing.properties
+
+# Internal Documentation (Move to Private Repository)
+internal-docs/
 
 # Flutter example ephemeral
 examples/**/pubspec.lock

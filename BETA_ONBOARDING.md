@@ -93,7 +93,7 @@ import GoMailerPushSDK
 
 // Initialize (in AppDelegate)
 GoMailerPushSDK.configure(
-    apiKey: "YOUR_API_KEY",
+    apiKey: "YOUR_GOMAILER_API_KEY", // Contact support for beta credentials
     environment: .production
 )
 
@@ -120,7 +120,7 @@ import com.gomailer.GoMailerPushSDK
 // Initialize (in Application or MainActivity)
 GoMailerPushSDK.configure(
     this,
-    apiKey = "YOUR_API_KEY",
+    apiKey = "YOUR_GOMAILER_API_KEY", // Contact support for beta credentials
     environment = GoMailerEnvironment.PRODUCTION
 )
 
