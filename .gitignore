@@ -63,10 +63,6 @@ builds/
 **/*.mobileprovision
 **/signing.properties
 
-# Internal Documentation (Move to Private Repository)
-internal-docs/*
-!internal-docs/README.md
-
 # Flutter example ephemeral
 examples/**/pubspec.lock
 examples/**/android/local.properties
