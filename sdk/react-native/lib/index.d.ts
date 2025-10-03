@@ -45,7 +45,7 @@ declare class GoMailer {
     private eventEmitter;
     private logLevel;
     /** SDK Version */
-    static readonly VERSION = "1.1.0";
+    static readonly VERSION = "1.3.0";
     constructor();
     /**
      * Get the singleton instance of Go Mailer

@@ -3,7 +3,10 @@ android/build/
 ios/build/
 
 # Development files
+# Only ignore TypeScript src/, not Android native src/
 src/
+!android/src/
+!ios/src/
 tsconfig.json
 jest.config.js
 .eslintrc.js

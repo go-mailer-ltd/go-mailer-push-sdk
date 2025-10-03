@@ -355,7 +355,7 @@ class GoMailer {
     }
 }
 /** SDK Version */
-GoMailer.VERSION = '1.1.0';
+GoMailer.VERSION = '1.3.0';
 // Export the singleton instance
 exports.default = GoMailer.getInstance();
 //# sourceMappingURL=index.js.map

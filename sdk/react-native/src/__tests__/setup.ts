@@ -1,9 +1,12 @@
 /// <reference types="jest" />
 import { jest } from '@jest/globals';
 
-const mockGoMailerModule = {
-  initialize: jest.fn().mockResolvedValue(undefined),
-  getDeviceToken: jest.fn().mockResolvedValue('test-device-token'),
+const mockGoMailerModule: any = {
+  initialize: jest.fn(async () => {}),
+  getDeviceToken: jest.fn(async () => ({ token: 'test-device-token' })),
+  registerForPushNotifications: jest.fn(async () => {}),
+  setUser: jest.fn(async () => {}),
+  trackEvent: jest.fn(async () => {}),
   addListener: jest.fn(),
   removeAllListeners: jest.fn(),
 };

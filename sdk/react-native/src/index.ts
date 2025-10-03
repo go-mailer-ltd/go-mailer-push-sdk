@@ -62,7 +62,7 @@ class GoMailer {
   private logLevel: GoMailerLogLevel = GoMailerLogLevel.INFO;
 
   /** SDK Version */
-  public static readonly VERSION = '1.1.0';
+  public static readonly VERSION = '1.3.0';
 
   constructor() {
     this.log('Initializing Go Mailer SDK...', GoMailerLogLevel.DEBUG);

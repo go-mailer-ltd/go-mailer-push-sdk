@@ -1,16 +1,16 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml:1:1-2:12
-INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml:1:1-2:12
+ADDED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml:1:1-2:12
+INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml:1:1-2:12
 	package
-		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml
+		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml
 	xmlns:android
-		ADDED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml:1:11-69
+		ADDED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml:1:11-69
 uses-sdk
-INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml
-INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml
+INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml
+INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml
+		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/push_test_react_native_example/node_modules/go-mailer/android/src/main/AndroidManifest.xml
+		INJECTED from /Users/noguntuberu/app/go-mailer-mobile-push/examples/react-native-example/node_modules/go-mailer-push-sdk/android/src/main/AndroidManifest.xml
